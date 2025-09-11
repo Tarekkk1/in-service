@@ -1,13 +1,7 @@
 {
-  "apphosting": {
-    "backendId": "in-service-backend",
-    "rootDir": "build/web",
-    "ignore": [
-      "node_modules",
-      ".git",
-      "firebase-debug.log",
-      "firebase-debug.*.log",
-      "functions"
-    ]
+  "hosting": {
+    "public": "build/web",
+    "ignore": ["**/.*", "**/node_modules/**"],
+    "cleanUrls": true
   }
 }
