@@ -1,4 +1,4 @@
-package com.mrblab.prime_lms
+package com.tarekzeyadproduction.inservice
 
 import io.flutter.embedding.android.FlutterActivity
 

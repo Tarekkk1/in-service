@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lms_app/firebase_options.dart';
 import 'package:lms_app/services/app_service.dart';
-import 'package:lms_app/services/hive_service.dart'; 
+import 'package:lms_app/services/hive_service.dart';
 import 'core/app.dart';
 import 'configs/language_config.dart';
 
-void main() async { 
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await EasyLocalization.ensureInitialized();
