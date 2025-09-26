@@ -80,7 +80,7 @@ mixin UserMixin {
           if (hasEnrolled(user, course)) {
             NextScreen.popup(context, CurriculamScreen(course: course));
           } else {
-            await _comfirmEnrollment(context, user, course, ref);
+            //await _comfirmEnrollment(context, user, course, ref);
           }
         //} else {
           // Checking license before opening iAP

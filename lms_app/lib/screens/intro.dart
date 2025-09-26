@@ -38,13 +38,13 @@ class IntroScreen extends ConsumerWidget {
       ),
       appBar: AppBar(
         actions: [
-          Visibility(
-            visible: settings?.skipLogin != null && settings!.skipLogin == true,
-            child: TextButton(
-              child: const Text('skip').tr(),
-              onPressed: () => _onSkipPressed(context),
-            ),
-          ),
+         // Visibility(
+         //   visible: settings?.skipLogin != null && settings!.skipLogin == true,
+         //   child: TextButton(
+         //     child: const Text('skip').tr(),
+         //     onPressed: () => _onSkipPressed(context),
+         //   ),
+         // ),
           Visibility(
             visible: isMultilanguageEnbled,
             child: IconButton(
