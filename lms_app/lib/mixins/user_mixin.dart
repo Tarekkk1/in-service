@@ -37,6 +37,7 @@ mixin UserMixin {
   }
 
   static bool isExpired(UserModel user) {
+    if (user.subscription == null) return true;
     final DateTime expireDate = user.subscription!.expireAt;
     final DateTime now = DateTime.now().toUtc();
     final difference = expireDate.difference(now).inDays;
@@ -75,21 +76,23 @@ mixin UserMixin {
         }
       } else {
         //  Premium Course
-        if (user.subscription != null && !isExpired(user)) {
+        //if (user.subscription != null && !isExpired(user)) {
           if (hasEnrolled(user, course)) {
             NextScreen.popup(context, CurriculamScreen(course: course));
           } else {
             await _comfirmEnrollment(context, user, course, ref);
           }
-        } else {
+        //} else {
           // Checking license before opening iAP
-          final settings = ref.read(appSettingsProvider);
-          if (IAPConfig.iAPEnabled && settings?.license == LicenseType.extended) {
-            NextScreen.openBottomSheet(context, const IAPScreen(), isDismissable: false);
-          } else {
-            openSnackbarFailure(context, 'Extended license required!');
-          }
-        }
+        //  final settings = ref.read(appSettingsProvider);
+         // if (IAPConfig.iAPEnabled && settings?.license == LicenseType.extended) {
+         //  NextScreen.openBottomSheet(context, const IAPScreen(), isDismissable: false);
+         // } else {
+         //   openSnackbarFailure(context, 'Extended license required!');
+         // }
+        // NextScreen.openBottomSheet(context, const IAPScreen(), isDismissable: false);
+
+        //}
       }
     } else {
       NextScreen.openBottomSheet(context, const LoginScreen(popUpScreen: true));
@@ -110,14 +113,15 @@ mixin UserMixin {
     required UserModel user,
     required Course course,
   }) async {
-    if (course.priceStatus == 'free') {
-      NextScreen.popup(context, CurriculamScreen(course: course));
-    } else {
-      if (!isExpired(user)) {
-        NextScreen.popup(context, CurriculamScreen(course: course));
-      } else {
-        NextScreen.openBottomSheet(context, const IAPScreen());
-      }
-    }
+    NextScreen.popup(context, CurriculamScreen(course: course));
+    //if (course.priceStatus == 'free') {
+    //  NextScreen.popup(context, CurriculamScreen(course: course));
+    //} else {
+    //  if (!isExpired(user)) {
+    //    NextScreen.popup(context, CurriculamScreen(course: course));
+    //  } else {
+    //    NextScreen.openBottomSheet(context, const IAPScreen());
+    //  }
+    //}
   }
 }

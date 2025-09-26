@@ -100,17 +100,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 'login-to-access-features',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
               ).tr(),
-              SocialLogins(
-                afterSignIn: afterSignIn,
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: const Text(
-                  '------ OR ------',
-                  style: TextStyle(color: Colors.blueGrey),
-                ),
-              ),
+              // SocialLogins(
+              //   afterSignIn: afterSignIn,
+              // ),
+              // Container(
+              //   alignment: Alignment.center,
+              //   padding: const EdgeInsets.symmetric(vertical: 20),
+              //   child: const Text(
+              //     '------ OR ------',
+              //     style: TextStyle(color: Colors.blueGrey),
+              //   ),
+              // ),
+              const SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -162,16 +163,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       return null;
                     },
                   ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      child: const Text(
-                        'forgot-password',
-                        style: TextStyle(fontWeight: FontWeight.w600, color: Colors.blueAccent),
-                      ).tr(),
-                      onPressed: () => NextScreen.iOS(context, const ResetPassword()),
-                    ),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.centerRight,
+                  //   child: TextButton(
+                  //     child: const Text(
+                  //       'forgot-password',
+                  //       style: TextStyle(fontWeight: FontWeight.w600, color: Colors.blueAccent),
+                  //     ).tr(),
+                  //     onPressed: () => NextScreen.iOS(context, const ResetPassword()),
+                  //   ),
+                  // ),
+                  const SizedBox(height: 20),
                   RoundedLoadingButton(
                     animateOnTap: false,
                     controller: _btnController,
@@ -184,26 +186,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.white),
                     ).tr(),
                   ),
-                  Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          "no-account",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
-                        ).tr(),
-                        TextButton(
-                            child: Text(
-                              'create-account',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
-                            ).tr(),
-                            onPressed: () => NextScreen.replace(context, const SignUpScreen())),
-                      ],
-                    ),
-                  ),
+                  const SizedBox(height: 20),
+                  // Container(
+                  //   width: double.infinity,
+                  //   alignment: Alignment.center,
+                  //   padding: const EdgeInsets.only(top: 15),
+                  //   child: Wrap(
+                  //     crossAxisAlignment: WrapCrossAlignment.center,
+                  //     children: [
+                  //       Text(
+                  //         "no-account",
+                  //         style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                  //       ).tr(),
+                  //       TextButton(
+                  //           child: Text(
+                  //             'create-account',
+                  //             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
+                  //           ).tr(),
+                  //           onPressed: () => NextScreen.replace(context, const SignUpScreen())),
+                  //     ],
+                  //   ),
+                  // ),
                   const PrivacyInfo(),
                 ],
               ),

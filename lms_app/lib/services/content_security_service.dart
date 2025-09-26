@@ -9,10 +9,10 @@ class ContentSecurityService {
   initContentSecurity(WidgetRef ref) {
     final settings = ref.read(appSettingsProvider);
     final bool contentSecurity = settings?.contentSecurity ?? false;
-    if (contentSecurity && settings?.license == LicenseType.extended) {
+    //if (contentSecurity && settings?.license == LicenseType.extended) {
       _preventScreenshotOn();
       _checkScreenRecording();
-    }
+    //}
   }
 
   disposeContentSecurity() {

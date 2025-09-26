@@ -20,7 +20,8 @@ mixin CourseMixin {
       final double courseProgess = validIds.isEmpty ? 0 : (validIds.length / course.lessonsCount);
       if (courseProgess == 0) {
         return 'start-course';
-      } else if (courseProgess > 0 && courseProgess < 1) {
+      } else 
+      if (courseProgess > 0 && courseProgess < 1) {
         return 'continue-course';
       } else {
         return 'restart-course';

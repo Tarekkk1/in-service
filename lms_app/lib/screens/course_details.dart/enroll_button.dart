@@ -21,7 +21,8 @@ class EnrollButton extends ConsumerWidget with UserMixin {
     final user = ref.watch(userDataProvider);
     final bool isLoading = ref.watch(_isLoadingEnrollmentProvider);
     final String text = CourseMixin.enrollButtonText(course, user);
-    final bool isPremium = course.priceStatus == priceStatus.keys.first ? false : true;
+    //final bool isPremium = course.priceStatus == priceStatus.keys.first ? false : true;
+    final bool isPremium = true;
 
     return BottomAppBar(
       padding: const EdgeInsets.all(0),

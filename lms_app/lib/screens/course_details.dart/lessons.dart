@@ -76,11 +76,11 @@ class Lessons extends ConsumerWidget with CourseMixin, UserMixin {
         }
       } else {
         // Premium
-        if (hasEnrolled(user, course) && !UserMixin.isExpired(user)) {
+        //if (hasEnrolled(user, course) && !UserMixin.isExpired(user)) {
           _openLesson(context, lesson, ref);
-        } else {
-          openSnackbar(context, 'Enroll to open lesson');
-        }
+        //} else {
+         // openSnackbar(context, 'Enroll to open lesson');
+        //}
       }
     } else {
       NextScreen.openBottomSheet(context, const LoginScreen());

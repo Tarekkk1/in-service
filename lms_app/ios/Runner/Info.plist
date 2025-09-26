@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Prime LMS</string>
+	<string>In Service</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -28,7 +28,7 @@
 		<string>in</string>
 	</array>
 	<key>CFBundleName</key>
-	<string>Prime LMS</string>
+	<string>In Service</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -54,9 +54,11 @@
 	<key>FacebookClientToken</key>
 	<string>665500d5d5c72ce7aaa61448445</string>
 	<key>FacebookDisplayName</key>
-	<string>Prime LMS</string>
+	<string>In Service</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~3347511713</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-beta</string>
@@ -64,8 +66,15 @@
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
 	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>13.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs this permission to access your chosen photo from your library and update your profile picture</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -92,14 +101,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-  		<key>NSAllowsArbitraryLoads</key>
-  		<true/>
-	</dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>LSMinimumSystemVersion</key>
-    <string>13.0.0</string>
 </dict>
 </plist>

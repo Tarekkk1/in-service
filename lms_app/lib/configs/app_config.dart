@@ -4,7 +4,7 @@ class AppConfig {
 
   
   // App Name
-  static const String appName = 'PrimeLms';
+  static const String appName = 'In Service';
 
   // App Theme Color - Change Hex code <3F51B5>
   static const Color appThemeColor = Color(0xFF3F51B5);

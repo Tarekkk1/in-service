@@ -45,14 +45,14 @@ class UserInfo extends StatelessWidget with UserMixin {
         Consumer(
           builder: (context, ref, child) {
             final settings = ref.watch(appSettingsProvider);
-            if (IAPConfig.iAPEnabled && settings?.license == LicenseType.extended) {
+            //if (IAPConfig.iAPEnabled && settings?.license == LicenseType.extended) {
               return InkWell(
                 child: user.subscription == null ? _noSubscriptionContainer(context) : _subscriptionContainer(context),
                 onTap: () => NextScreen.openBottomSheet(context, const IAPScreen(), isDismissable: false),
               );
-            } else {
-              return const SizedBox.shrink();
-            }
+            //} else {
+            //  return const SizedBox.shrink();
+            //}
           },
         )
       ],

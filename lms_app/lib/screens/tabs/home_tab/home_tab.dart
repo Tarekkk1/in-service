@@ -77,7 +77,7 @@ class HomeTab extends ConsumerWidget {
                 if (settings != null && settings.homeCategory1 != null) Category1Courses(category: settings.homeCategory1!),
                 if (settings != null && settings.homeCategory2 != null) Category2Courses(category: settings.homeCategory2!),
                 if (settings != null && settings.homeCategory3 != null) Category3Courses(category: settings.homeCategory3!),
-                Visibility(visible: settings?.topAuthors ?? true, child: const TopAuthors()),
+                // Visibility(visible: settings?.topAuthors ?? true, child: const TopAuthors()),
                 Visibility(visible: settings?.latestCourses ?? true, child: const HomeLatestCourses()),
               ],
             ),
