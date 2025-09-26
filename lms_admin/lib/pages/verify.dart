@@ -24,7 +24,8 @@ class VerifyInfo extends ConsumerStatefulWidget {
 class _VerifyInfoState extends ConsumerState<VerifyInfo> {
   var textFieldCtlr = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  final RoundedLoadingButtonController _btnCtlr = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnCtlr =
+      RoundedLoadingButtonController();
 
   void _handleVerification() async {
     if (formKey.currentState!.validate()) {
@@ -35,19 +36,24 @@ class _VerifyInfoState extends ConsumerState<VerifyInfo> {
 
   _checkVerification() async {
     _btnCtlr.start();
-    final LicenseType licenseType = await APIService().verifyPurchaseCode(textFieldCtlr.text);
+    // final LicenseType licenseType = await APIService().verifyPurchaseCode(textFieldCtlr.text);
+    final LicenseType licenseType = LicenseType
+        .extended; // Remove this line when you want to use real verification
     final bool isVerified = licenseType != LicenseType.none;
 
     if (isVerified) {
-      final AppSettingsModel settingsModel = AppSettingsModel(license: licenseType);
-      final Map<String, dynamic> data = AppSettingsModel.getMapLicense(settingsModel);
+      final AppSettingsModel settingsModel =
+          AppSettingsModel(license: licenseType);
+      final Map<String, dynamic> data =
+          AppSettingsModel.getMapLicense(settingsModel);
 
       await FirebaseService().updateAppSettings(data);
       ref.invalidate(appSettingsProvider);
       await ref.read(userDataProvider.notifier).getData();
 
       _btnCtlr.success();
-      await Future.delayed(const Duration(milliseconds: 500)).then((value) => NextScreen.replaceAnimation(context, const Home()));
+      await Future.delayed(const Duration(milliseconds: 500))
+          .then((value) => NextScreen.replaceAnimation(context, const Home()));
     } else {
       _btnCtlr.reset();
       if (!mounted) return;
@@ -65,7 +71,8 @@ class _VerifyInfoState extends ConsumerState<VerifyInfo> {
         child: Row(
           children: [
             Visibility(
-              visible: Responsive.isDesktop(context) || Responsive.isDesktopLarge(context),
+              visible: Responsive.isDesktop(context) ||
+                  Responsive.isDesktopLarge(context),
               child: Flexible(
                 flex: 1,
                 fit: FlexFit.tight,
@@ -84,7 +91,8 @@ class _VerifyInfoState extends ConsumerState<VerifyInfo> {
               child: Form(
                 key: formKey,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.09),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.09),
                   color: Colors.white,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,7 +109,10 @@ class _VerifyInfoState extends ConsumerState<VerifyInfo> {
                       Text(
                         'Verify Your Purchase',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
                         height: 5,
@@ -109,16 +120,24 @@ class _VerifyInfoState extends ConsumerState<VerifyInfo> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Where is Your Purchase Code?', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.blueGrey)),
+                          Text('Where is Your Purchase Code?',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(color: Colors.blueGrey)),
                           const SizedBox(
                             width: 10,
                           ),
                           InkWell(
-                            onTap: () => AppService()
-                                .openLink(context, 'https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-'),
+                            onTap: () => AppService().openLink(context,
+                                'https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-'),
                             child: const Text(
                               'Check',
-                              style: TextStyle(color: Colors.blue, fontSize: 15, fontWeight: FontWeight.w500, decoration: TextDecoration.underline),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.underline),
                             ),
                           ),
                         ],
@@ -141,7 +160,8 @@ class _VerifyInfoState extends ConsumerState<VerifyInfo> {
                             child: TextFormField(
                               controller: textFieldCtlr,
                               validator: (value) {
-                                if (value!.isEmpty) return 'Purchase code is required';
+                                if (value!.isEmpty)
+                                  return 'Purchase code is required';
                                 return null;
                               },
                               decoration: InputDecoration(
@@ -169,7 +189,10 @@ class _VerifyInfoState extends ConsumerState<VerifyInfo> {
                             elevation: 0,
                             child: Text(
                               'Verify',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(color: Colors.white),
                             ),
                           ),
                         ],

@@ -36,7 +36,8 @@ final tagsProvider = FutureProvider<List<Tag>>((ref) async {
 });
 
 class CourseForm extends ConsumerStatefulWidget {
-  const CourseForm({Key? key, required this.course, this.isAuthorTab}) : super(key: key);
+  const CourseForm({Key? key, required this.course, this.isAuthorTab})
+      : super(key: key);
 
   final Course? course;
   final bool? isAuthorTab;
@@ -45,7 +46,8 @@ class CourseForm extends ConsumerStatefulWidget {
   ConsumerState<CourseForm> createState() => _CourseFormState();
 }
 
-class _CourseFormState extends ConsumerState<CourseForm> with TextFields, SectionsMixin, CourseMixin {
+class _CourseFormState extends ConsumerState<CourseForm>
+    with TextFields, SectionsMixin, CourseMixin {
   var nameCtlr = TextEditingController();
   var thumbnailUrlCtlr = TextEditingController();
   var videoUrlCtlr = TextEditingController();
@@ -82,7 +84,8 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
 
   Future<String?> _getImageUrl() async {
     if (_selectedImage != null) {
-      final String? imageUrl = await FirebaseService().uploadImageToFirebaseHosting(_selectedImage!, 'course_thumbnails');
+      final String? imageUrl = await FirebaseService()
+          .uploadImageToFirebaseHosting(_selectedImage!, 'course_thumbnails');
       return imageUrl;
     } else {
       return thumbnailUrlCtlr.text;
@@ -97,7 +100,10 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
         final String? imageUrl = await _getImageUrl();
         if (imageUrl != null) {
           thumbnailUrlCtlr.text = imageUrl;
-          await _handleUpload(setCourseStatus(course: _course, isAuthorTab: widget.isAuthorTab, isDraft: false));
+          await _handleUpload(setCourseStatus(
+              course: _course,
+              isAuthorTab: widget.isAuthorTab,
+              isDraft: false));
           ref.invalidate(coursesCountProvider);
           _publishBtnCtlr.reset();
           if (!mounted) return;
@@ -120,7 +126,8 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
       final String? imageUrl = await _getImageUrl();
       thumbnailUrlCtlr.text = imageUrl ?? '';
       //draft
-      await _handleUpload(setCourseStatus(course: _course, isAuthorTab: widget.isAuthorTab, isDraft: true));
+      await _handleUpload(setCourseStatus(
+          course: _course, isAuthorTab: widget.isAuthorTab, isDraft: true));
       _draftBtnCtlr.reset();
       if (!mounted) return;
       openSuccessToast(context, 'Drafts saved!');
@@ -139,20 +146,24 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
     });
   }
 
-  Course _courseData(String courseStatus, String description, int lessonsCount) {
+  Course _courseData(
+      String courseStatus, String description, int lessonsCount) {
     final String id = _course?.id ?? FirebaseService.getUID('courses');
     final createdAt = _course?.createdAt ?? DateTime.now().toUtc();
     final updatedAt = _course == null ? null : DateTime.now().toUtc();
     final String name = nameCtlr.text.isEmpty ? 'Untitled' : nameCtlr.text;
-    final String thumbnail = thumbnailUrlCtlr.text.isEmpty ? '' : thumbnailUrlCtlr.text;
+    final String thumbnail =
+        thumbnailUrlCtlr.text.isEmpty ? '' : thumbnailUrlCtlr.text;
     final String? video = videoUrlCtlr.text.isEmpty ? null : videoUrlCtlr.text;
     final String priceStatus = _pricingStatus;
     final double rating = _course?.rating ?? 0.0;
     final int studentsCount = _course?.studentsCount ?? 0;
-    final String? duration = durationCtlr.text.isEmpty ? null : durationCtlr.text;
+    final String? duration =
+        durationCtlr.text.isEmpty ? null : durationCtlr.text;
     final String? summary = summaryCtlr.text.isEmpty ? null : summaryCtlr.text;
     final String? categoriyId = _selectedCategoryId;
-    final String? language = languageCtlr.text.isEmpty ? null : languageCtlr.text;
+    final String? language =
+        languageCtlr.text.isEmpty ? null : languageCtlr.text;
 
     //Author Data
     final Author? author = _authorData();
@@ -190,7 +201,8 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
 
   Future<int> _getLessonCount() async {
     if (_course != null) {
-      final int count = await FirebaseService().getLessonsCountFromCourse(_course!.id);
+      final int count =
+          await FirebaseService().getLessonsCountFromCourse(_course!.id);
       return count;
     } else {
       return 0;
@@ -204,7 +216,10 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
       if (_course?.author == null) {
         author = Author(id: user.id, name: user.name, imageUrl: user.imageUrl);
       } else {
-        author = Author(id: _course!.author!.id, name: _course!.author!.name, imageUrl: _course!.author!.imageUrl);
+        author = Author(
+            id: _course!.author!.id,
+            name: _course!.author!.name,
+            imageUrl: _course!.author!.imageUrl);
       }
     }
     return author;
@@ -237,7 +252,9 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
     final course = _courseData('', description, lessonsCount);
     if (!mounted) return;
     CustomDialogs.openFormDialog(context,
-        widget: PointerInterceptor(child: CoursePreview(course: course)), verticalPaddingPercentage: 0.02, horizontalPaddingPercentage: 0.15);
+        widget: PointerInterceptor(child: CoursePreview(course: course)),
+        verticalPaddingPercentage: 0.02,
+        horizontalPaddingPercentage: 0.15);
   }
 
   @override
@@ -261,12 +278,16 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                CustomButtons.customOutlineButton(context, icon: Icons.remove_red_eye, text: 'Preview', onPressed: () => _handlePreview()),
+                CustomButtons.customOutlineButton(context,
+                    icon: Icons.remove_red_eye,
+                    text: 'Preview',
+                    onPressed: () => _handlePreview()),
                 const SizedBox(
                   width: 10,
                 ),
                 Visibility(
-                  visible: _course == null || _course?.status == courseStatus.keys.elementAt(0),
+                  visible: _course == null ||
+                      _course?.status == courseStatus.keys.elementAt(0),
                   child: CustomButtons.submitButton(context,
                       buttonController: _draftBtnCtlr,
                       text: 'Save Draft',
@@ -282,7 +303,9 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
                 CustomButtons.submitButton(
                   context,
                   buttonController: _publishBtnCtlr,
-                  text: widget.isAuthorTab != null && widget.isAuthorTab == true ? 'Submit' : 'Publish',
+                  text: widget.isAuthorTab != null && widget.isAuthorTab == true
+                      ? 'Submit'
+                      : 'Publish',
                   onPressed: _handleSubmit,
                   borderRadius: 20,
                   width: 120,
@@ -294,7 +317,9 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
         ],
       ),
       body: SingleChildScrollView(
-        padding: Responsive.isMobile(context) ? const EdgeInsets.all(20) : const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
+        padding: Responsive.isMobile(context)
+            ? const EdgeInsets.all(20)
+            : const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
         child: Form(
           key: formKey,
           child: Column(
@@ -304,7 +329,11 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
               Row(
                 children: [
                   Expanded(
-                    child: buildTextField(context, controller: nameCtlr, hint: 'Enter Course Title', title: 'Course Title *', hasImageUpload: false),
+                    child: buildTextField(context,
+                        controller: nameCtlr,
+                        hint: 'Enter Course Title',
+                        title: 'Course Title *',
+                        hasImageUpload: false),
                   ),
                   const SizedBox(
                     width: 10,
@@ -342,7 +371,10 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
                 validationRequired: false,
               ),
               const SizedBox(height: 30),
-              buildSection(context, courseId: _course?.id, isMobile: Responsive.isMobile(context), ref: ref),
+              buildSection(context,
+                  courseId: _course?.id,
+                  isMobile: Responsive.isMobile(context),
+                  ref: ref),
               const SizedBox(height: 30),
               tags.when(
                 loading: () => const CircularProgressIndicator(),
@@ -351,7 +383,8 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
                   selectedTagIDs: _selectedTagIDs,
                   tags: data,
                   onAdd: (value) => setState(() => _selectedTagIDs.add(value)),
-                  onRemove: (value) => setState(() => _selectedTagIDs.remove(value)),
+                  onRemove: (value) =>
+                      setState(() => _selectedTagIDs.remove(value)),
                 ),
               ),
               const SizedBox(height: 30),
@@ -396,17 +429,19 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
               Consumer(
                 builder: (context, ref, child) {
                   final settings = ref.watch(appSettingsProvider);
-                  final LicenseType license = settings.value?.license ?? LicenseType.none;
-                  final bool isExtendedLicense = license == LicenseType.extended;
+                  final LicenseType license =
+                      settings.value?.license ?? LicenseType.none;
+                  final bool isExtendedLicense =
+                      license == LicenseType.extended;
 
                   return RadioOptions(
                     contentType: _pricingStatus,
                     onChanged: (value) {
-                      if (isExtendedLicense) {
-                        setState(() => _pricingStatus = value);
-                      } else {
-                        openFailureToast(context, 'Extended license is required');
-                      }
+                      // if (isExtendedLicense) {
+                      setState(() => _pricingStatus = value);
+                      // } else {
+                      //   openFailureToast(context, 'Extended license is required');
+                      // }
                     },
                     options: priceStatus,
                     title: 'Course Pricing',
@@ -421,13 +456,19 @@ class _CourseFormState extends ConsumerState<CourseForm> with TextFields, Sectio
                 children: [
                   Expanded(
                       child: buildTextField(context,
-                          controller: durationCtlr, hint: 'Enter course duration', title: 'Course Duration *', hasImageUpload: false)),
+                          controller: durationCtlr,
+                          hint: 'Enter course duration',
+                          title: 'Course Duration *',
+                          hasImageUpload: false)),
                   const SizedBox(
                     width: 20,
                   ),
                   Expanded(
                       child: buildTextField(context,
-                          controller: languageCtlr, hint: 'Enter course language', title: 'Course Language *', hasImageUpload: false)),
+                          controller: languageCtlr,
+                          hint: 'Enter course language',
+                          title: 'Course Language *',
+                          hasImageUpload: false)),
                 ],
               ),
               const SizedBox(

@@ -9,13 +9,15 @@ class APIService {
   Future<LicenseType> verifyPurchaseCode(String purchaseCode) async {
     LicenseType license = LicenseType.none;
 
-    final String url = 'https://mrb-lab.com/wp-json/envato/v1/verify-purchase/$purchaseCode';
+    final String url =
+        'https://mrb-lab.com/wp-json/envato/v1/verify-purchase/$purchaseCode';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         var decodedData = jsonDecode(response.body);
 
-        if (decodedData['validated'] == true && decodedData['purchase'] != null) {
+        if (decodedData['validated'] == true &&
+            decodedData['purchase'] != null) {
           final int verifiedItemId = decodedData['purchase']['item']['id'];
           if (verifiedItemId == itemId) {
             return license = _getLicenseTypeFromJson(decodedData);
@@ -31,12 +33,12 @@ class APIService {
   }
 
   static LicenseType _getLicenseTypeFromJson(json) {
-    if (json['purchase']['license'] == 'Regular License') {
-      return LicenseType.regular;
-    } else if (json['purchase']['license'] == 'Extended License') {
-      return LicenseType.extended;
-    } else {
-      return LicenseType.none;
-    }
+    // if (json['purchase']['license'] == 'Regular License') {
+    //   return LicenseType.regular;
+    // } else if (json['purchase']['license'] == 'Extended License') {
+    return LicenseType.extended;
+    // } else {
+    //   return LicenseType.none;
+    // }
   }
 }

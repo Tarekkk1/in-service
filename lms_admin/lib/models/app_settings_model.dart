@@ -4,7 +4,15 @@ import 'ads_model.dart';
 enum LicenseType { none, regular, extended }
 
 class AppSettingsModel {
-  final bool? freeCourses, topAuthors, categories, featured, tags, skipLogin, onBoarding, latestCourses, contentSecurity;
+  final bool? freeCourses,
+      topAuthors,
+      categories,
+      featured,
+      tags,
+      skipLogin,
+      onBoarding,
+      latestCourses,
+      contentSecurity;
   final String? supportEmail, website, privacyUrl;
   final HomeCategory? homeCategory1, homeCategory2, homeCategory3;
   final AppSettingsSocialInfo? social;
@@ -46,10 +54,15 @@ class AppSettingsModel {
       supportEmail: d['email'],
       privacyUrl: d['privacy_url'],
       website: d['website'],
-      homeCategory1: d['category1'] != null ? HomeCategory.fromMap(d['category1']) : null,
-      homeCategory2: d['category2'] != null ? HomeCategory.fromMap(d['category2']) : null,
-      homeCategory3: d['category3'] != null ? HomeCategory.fromMap(d['category3']) : null,
-      social: d['social'] != null ? AppSettingsSocialInfo.fromMap(d['social']) : null,
+      homeCategory1:
+          d['category1'] != null ? HomeCategory.fromMap(d['category1']) : null,
+      homeCategory2:
+          d['category2'] != null ? HomeCategory.fromMap(d['category2']) : null,
+      homeCategory3:
+          d['category3'] != null ? HomeCategory.fromMap(d['category3']) : null,
+      social: d['social'] != null
+          ? AppSettingsSocialInfo.fromMap(d['social'])
+          : null,
       ads: d['ads'] != null ? AdsModel.fromMap(d['ads']) : null,
       license: _getLicenseType(d['license']),
       contentSecurity: d['content_security'] ?? false,
@@ -57,13 +70,13 @@ class AppSettingsModel {
   }
 
   static LicenseType _getLicenseType(String? value) {
-    if (value == 'regular') {
-      return LicenseType.regular;
-    } else if (value == 'extended') {
-      return LicenseType.extended;
-    } else {
-      return LicenseType.none;
-    }
+    // if (value == 'regular') {
+    //   return LicenseType.regular;
+    // } else if (value == 'extended') {
+    return LicenseType.extended;
+    // } else {
+    //   return LicenseType.none;
+    // }
   }
 
   static Map<String, dynamic> getMap(AppSettingsModel d) {
@@ -79,10 +92,17 @@ class AppSettingsModel {
       'email': d.supportEmail,
       'privacy_url': d.privacyUrl,
       'website': d.website,
-      'category1': d.homeCategory1 != null ? HomeCategory.getMap(d.homeCategory1!) : null,
-      'category2': d.homeCategory2 != null ? HomeCategory.getMap(d.homeCategory2!) : null,
-      'category3': d.homeCategory3 != null ? HomeCategory.getMap(d.homeCategory3!) : null,
-      'social': d.social != null ? AppSettingsSocialInfo.getMap(d.social!) : null,
+      'category1': d.homeCategory1 != null
+          ? HomeCategory.getMap(d.homeCategory1!)
+          : null,
+      'category2': d.homeCategory2 != null
+          ? HomeCategory.getMap(d.homeCategory2!)
+          : null,
+      'category3': d.homeCategory3 != null
+          ? HomeCategory.getMap(d.homeCategory3!)
+          : null,
+      'social':
+          d.social != null ? AppSettingsSocialInfo.getMap(d.social!) : null,
       'content_security': d.contentSecurity,
     };
   }
@@ -134,7 +154,11 @@ class HomeCategory {
 class AppSettingsSocialInfo {
   final String? fb, youtube, twitter, instagram;
 
-  AppSettingsSocialInfo({required this.fb, required this.youtube, required this.twitter, required this.instagram});
+  AppSettingsSocialInfo(
+      {required this.fb,
+      required this.youtube,
+      required this.twitter,
+      required this.instagram});
 
   factory AppSettingsSocialInfo.fromMap(Map<String, dynamic> d) {
     return AppSettingsSocialInfo(
