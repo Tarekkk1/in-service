@@ -60,18 +60,39 @@ class AppSettings extends ConsumerWidget with TextFields {
                 final categories = ref.read(categoriesProvider);
                 final HomeCategory? category1 = selectedCategoryId1 == null
                     ? null
-                    : HomeCategory(id: selectedCategoryId1, name: categories.where((element) => element.id == selectedCategoryId1).first.name);
+                    : HomeCategory(
+                        id: selectedCategoryId1,
+                        name: categories
+                            .where(
+                                (element) => element.id == selectedCategoryId1)
+                            .first
+                            .name);
 
                 final HomeCategory? category2 = selectedCategoryId2 == null
                     ? null
-                    : HomeCategory(id: selectedCategoryId2, name: categories.where((element) => element.id == selectedCategoryId2).first.name);
+                    : HomeCategory(
+                        id: selectedCategoryId2,
+                        name: categories
+                            .where(
+                                (element) => element.id == selectedCategoryId2)
+                            .first
+                            .name);
 
                 final HomeCategory? category3 = selectedCategoryId3 == null
                     ? null
-                    : HomeCategory(id: selectedCategoryId3, name: categories.where((element) => element.id == selectedCategoryId3).first.name);
+                    : HomeCategory(
+                        id: selectedCategoryId3,
+                        name: categories
+                            .where(
+                                (element) => element.id == selectedCategoryId3)
+                            .first
+                            .name);
 
-                final AppSettingsSocialInfo social =
-                    AppSettingsSocialInfo(fb: fbCtlr.text, youtube: youtubeCtlr.text, twitter: twitterCtrl.text, instagram: instaCtlr.text);
+                final AppSettingsSocialInfo social = AppSettingsSocialInfo(
+                    fb: fbCtlr.text,
+                    youtube: youtubeCtlr.text,
+                    twitter: twitterCtrl.text,
+                    instagram: instaCtlr.text);
 
                 final AppSettingsModel appSettingsModel = AppSettingsModel(
                   featured: isFeaturedEnbled,
@@ -123,14 +144,16 @@ class AppSettings extends ConsumerWidget with TextFields {
               ? const Center(child: CircularProgressIndicator())
               : Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 100),
+                    padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 20, bottom: 100),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           padding: const EdgeInsets.all(30),
                           margin: const EdgeInsets.symmetric(vertical: 20),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300)),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -143,60 +166,95 @@ class AppSettings extends ConsumerWidget with TextFields {
                                   deafultValue: isFeaturedEnbled,
                                   title: 'Featured Section',
                                   onChanged: (value) {
-                                    ref.read(isFeaturedEnabledProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(
+                                            isFeaturedEnabledProvider.notifier)
+                                        .update((state) => value);
                                   }),
                               SwitchOption(
                                   deafultValue: isCategoriesEnbaled,
                                   title: 'Categories Section',
                                   onChanged: (value) {
-                                    ref.read(isCategoriesEnabledProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(isCategoriesEnabledProvider
+                                            .notifier)
+                                        .update((state) => value);
                                   }),
                               SwitchOption(
                                   deafultValue: isFreeCoursesEnbled,
                                   title: 'Free Couses Section',
                                   onChanged: (value) {
-                                    ref.read(isFreeCoursesEnabledProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(isFreeCoursesEnabledProvider
+                                            .notifier)
+                                        .update((state) => value);
                                   }),
                               SwitchOption(
                                   deafultValue: isTopAuthorsEnabled,
                                   title: 'Top Authors Sections',
                                   onChanged: (value) {
-                                    ref.read(isTopAuthorsEnabledProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(isTopAuthorsEnabledProvider
+                                            .notifier)
+                                        .update((state) => value);
                                   }),
                               SwitchOption(
                                   deafultValue: isLatestCoursesEnabled,
                                   title: 'Latest Courses Section',
                                   onChanged: (value) {
-                                    ref.read(isLatestCoursesProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(isLatestCoursesProvider.notifier)
+                                        .update((state) => value);
                                   }),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: CategoryDropdown(
                                   title: 'Home Category 1',
                                   selectedCategoryId: selectedCategoryId1,
-                                  onChanged: (value) => ref.read(selectedHomeCategoryId1Provider.notifier).update((state) => value),
+                                  onChanged: (value) => ref
+                                      .read(selectedHomeCategoryId1Provider
+                                          .notifier)
+                                      .update((state) => value),
                                   hasClearButton: true,
-                                  onClearSelection: () => ref.read(selectedHomeCategoryId1Provider.notifier).update((state) => null),
+                                  onClearSelection: () => ref
+                                      .read(selectedHomeCategoryId1Provider
+                                          .notifier)
+                                      .update((state) => null),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: CategoryDropdown(
                                   title: 'Home Category 2',
                                   selectedCategoryId: selectedCategoryId2,
-                                  onChanged: (value) => ref.read(selectedHomeCategoryId2Provider.notifier).update((state) => value),
+                                  onChanged: (value) => ref
+                                      .read(selectedHomeCategoryId2Provider
+                                          .notifier)
+                                      .update((state) => value),
                                   hasClearButton: true,
-                                  onClearSelection: () => ref.read(selectedHomeCategoryId2Provider.notifier).update((state) => null),
+                                  onClearSelection: () => ref
+                                      .read(selectedHomeCategoryId2Provider
+                                          .notifier)
+                                      .update((state) => null),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 20, bottom: 50),
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 50),
                                 child: CategoryDropdown(
                                   title: 'Home Category 3',
                                   selectedCategoryId: selectedCategoryId3,
-                                  onChanged: (value) => ref.read(selectedHomeCategoryId3Provider.notifier).update((state) => value),
+                                  onChanged: (value) => ref
+                                      .read(selectedHomeCategoryId3Provider
+                                          .notifier)
+                                      .update((state) => value),
                                   hasClearButton: true,
-                                  onClearSelection: () => ref.read(selectedHomeCategoryId3Provider.notifier).update((state) => null),
+                                  onClearSelection: () => ref
+                                      .read(selectedHomeCategoryId3Provider
+                                          .notifier)
+                                      .update((state) => null),
                                 ),
                               ),
                             ],
@@ -205,7 +263,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                         Container(
                           padding: const EdgeInsets.all(30),
                           margin: const EdgeInsets.symmetric(vertical: 20),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300)),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -218,7 +277,9 @@ class AppSettings extends ConsumerWidget with TextFields {
                                   deafultValue: isTagsEnabled,
                                   title: 'Show Tags',
                                   onChanged: (value) {
-                                    ref.read(isTagsEnabledProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(isTagsEnabledProvider.notifier)
+                                        .update((state) => value);
                                   }),
                             ],
                           ),
@@ -226,7 +287,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                         Container(
                           padding: const EdgeInsets.all(30),
                           margin: const EdgeInsets.symmetric(vertical: 20),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300)),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -239,24 +301,34 @@ class AppSettings extends ConsumerWidget with TextFields {
                                   deafultValue: onBoardingEnabled,
                                   title: 'On Boarding',
                                   onChanged: (value) {
-                                    ref.read(isOnboardingEnabledProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(isOnboardingEnabledProvider
+                                            .notifier)
+                                        .update((state) => value);
                                   }),
                               SwitchOption(
                                   deafultValue: isSkipLoginEnabled,
                                   title: 'Skip Login',
                                   onChanged: (value) {
-                                    ref.read(isSkipLoginEnabledProvider.notifier).update((state) => value);
+                                    ref
+                                        .read(
+                                            isSkipLoginEnabledProvider.notifier)
+                                        .update((state) => value);
                                   }),
                               SwitchOption(
                                 deafultValue: contentSecurityEnabled,
-                                title: 'Content Security (Disable screenshots and screen recording)',
+                                title:
+                                    'Content Security (Disable screenshots and screen recording)',
                                 onChanged: (value) {
-                                  final license = settings.value?.license ?? LicenseType.none;
-                                  if (license == LicenseType.extended) {
-                                    ref.read(isContentSecurityEnabledProvider.notifier).update((state) => value);
-                                  } else {
-                                    openFailureToast(context, 'Extended license is required to enable this feature');
-                                  }
+                                  // final license = settings.value?.license ?? LicenseType.none;
+                                  // if (license == LicenseType.extended) {
+                                  ref
+                                      .read(isContentSecurityEnabledProvider
+                                          .notifier)
+                                      .update((state) => value);
+                                  // } else {
+                                  //   openFailureToast(context, 'Extended license is required to enable this feature');
+                                  // }
                                 },
                               ),
                             ],
@@ -265,7 +337,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                         Container(
                           padding: const EdgeInsets.all(30),
                           margin: const EdgeInsets.symmetric(vertical: 20),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300)),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -275,7 +348,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                               ),
                               const Divider(),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: buildTextField(context,
                                     controller: supportEmailCtlr,
                                     hint: 'Email',
@@ -284,7 +358,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                                     validationRequired: false),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: buildTextField(context,
                                     controller: websiteCtlr,
                                     hint: 'Your website url',
@@ -293,7 +368,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                                     validationRequired: false),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: buildTextField(context,
                                     controller: privacyCtlr,
                                     hint: 'Privacy url',
@@ -307,7 +383,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                         Container(
                           padding: const EdgeInsets.all(30),
                           margin: const EdgeInsets.symmetric(vertical: 20),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300)),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -317,12 +394,18 @@ class AppSettings extends ConsumerWidget with TextFields {
                               ),
                               const Divider(),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: buildTextField(context,
-                                    controller: fbCtlr, hint: 'Facebook Page', title: 'Facebook', hasImageUpload: false, validationRequired: false),
+                                    controller: fbCtlr,
+                                    hint: 'Facebook Page',
+                                    title: 'Facebook',
+                                    hasImageUpload: false,
+                                    validationRequired: false),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: buildTextField(context,
                                     controller: youtubeCtlr,
                                     hint: 'Youtube channel url',
@@ -331,7 +414,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                                     validationRequired: false),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: buildTextField(context,
                                     controller: twitterCtrl,
                                     hint: 'X acount url',
@@ -340,7 +424,8 @@ class AppSettings extends ConsumerWidget with TextFields {
                                     validationRequired: false),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: buildTextField(context,
                                     controller: instaCtlr,
                                     hint: 'Instagram url',

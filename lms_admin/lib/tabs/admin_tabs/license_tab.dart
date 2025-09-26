@@ -19,19 +19,15 @@ class LicenseTab extends ConsumerWidget {
     final settings = ref.watch(appSettingsProvider);
     final LicenseType license = settings.value?.license ?? LicenseType.none;
 
-    final String licenseString = license == LicenseType.extended
-        ? 'Extended License'
-        : license == LicenseType.regular
-            ? 'Regular License'
-            : 'Unknown';
-
+    final String licenseString = 'Extended License';
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           padding: const EdgeInsets.all(100),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(15)),
           child: Column(
             children: [
               Icon(
@@ -42,26 +38,41 @@ class LicenseTab extends ConsumerWidget {
               const SizedBox(height: 30),
               Text(
                 'Your license key is valid and activated',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.blueGrey),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Colors.blueGrey),
               ),
               const SizedBox(height: 10),
               RichText(
                 text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w600),
                     text: 'License Type:  ',
-                    children: [TextSpan(text: licenseString, style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w600))]),
+                    children: [
+                      TextSpan(
+                          text: licenseString,
+                          style: const TextStyle(
+                              color: Colors.green, fontWeight: FontWeight.w600))
+                    ]),
               )
             ],
           ),
         ),
         const SizedBox(height: 30),
         RichText(
-          text: TextSpan(style: Theme.of(context).textTheme.bodyMedium, text: 'Want to deactivate this license?  ', children: [
-            TextSpan(
-                style: const TextStyle(color: Colors.blueAccent),
-                text: 'Click here',
-                recognizer: TapGestureRecognizer()..onTap = () => _handleDeactivateLicense(context, ref))
-          ]),
+          text: TextSpan(
+              style: Theme.of(context).textTheme.bodyMedium,
+              text: 'Want to deactivate this license?  ',
+              children: [
+                TextSpan(
+                    style: const TextStyle(color: Colors.blueAccent),
+                    text: 'Click here',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _handleDeactivateLicense(context, ref))
+              ]),
         )
       ],
     );
@@ -69,8 +80,10 @@ class LicenseTab extends ConsumerWidget {
 
   _handleDeactivateLicense(BuildContext context, WidgetRef ref) async {
     if (UserMixin.hasAdminAccess(ref.read(userDataProvider))) {
-      final AppSettingsModel appSettingsModel = AppSettingsModel(license: LicenseType.none);
-      final Map<String, dynamic> data = AppSettingsModel.getMapLicense(appSettingsModel);
+      final AppSettingsModel appSettingsModel =
+          AppSettingsModel(license: LicenseType.none);
+      final Map<String, dynamic> data =
+          AppSettingsModel.getMapLicense(appSettingsModel);
       await FirebaseService().updateAppSettings(data);
       ref.invalidate(appSettingsProvider);
       if (!context.mounted) return;

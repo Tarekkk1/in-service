@@ -29,7 +29,8 @@ class _LoginState extends ConsumerState<Login> {
   var emailCtlr = TextEditingController();
   var passwordCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  final RoundedLoadingButtonController _btnCtlr = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnCtlr =
+      RoundedLoadingButtonController();
   bool _obsecureText = true;
   IconData _lockIcon = CupertinoIcons.eye_fill;
 
@@ -51,7 +52,8 @@ class _LoginState extends ConsumerState<Login> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       _btnCtlr.start();
-      UserCredential? userCredential = await AuthService().loginWithEmailPassword(emailCtlr.text, passwordCtrl.text);
+      UserCredential? userCredential = await AuthService()
+          .loginWithEmailPassword(emailCtlr.text, passwordCtrl.text);
       if (userCredential?.user != null) {
         debugPrint('Login Success');
         _checkVerification(userCredential!);
@@ -64,7 +66,8 @@ class _LoginState extends ConsumerState<Login> {
   }
 
   _checkVerification(UserCredential userCredential) async {
-    final UserRoles role = await AuthService().checkUserRole(userCredential.user!.uid);
+    final UserRoles role =
+        await AuthService().checkUserRole(userCredential.user!.uid);
     if (role == UserRoles.admin || role == UserRoles.author) {
       ref.read(userRoleProvider.notifier).update((state) => role);
 
@@ -81,13 +84,17 @@ class _LoginState extends ConsumerState<Login> {
         NextScreen.replaceAnimation(context, const VerifyInfo());
       }
     } else {
-      await AuthService().adminLogout().then((value) => openFailureToast(context, 'Access Denied'));
+      await AuthService()
+          .adminLogout()
+          .then((value) => openFailureToast(context, 'Access Denied'));
     }
   }
 
   _handleDemoAdminLogin() async {
     ref.read(userRoleProvider.notifier).update((state) => UserRoles.guest);
-    await AuthService().loginAnnonumously().then((value) => NextScreen.replaceAnimation(context, const Home()));
+    await AuthService()
+        .loginAnnonumously()
+        .then((value) => NextScreen.replaceAnimation(context, const Home()));
   }
 
   @override
@@ -100,7 +107,8 @@ class _LoginState extends ConsumerState<Login> {
         child: Row(
           children: [
             Visibility(
-              visible: Responsive.isDesktop(context) || Responsive.isDesktopLarge(context),
+              visible: Responsive.isDesktop(context) ||
+                  Responsive.isDesktopLarge(context),
               child: Flexible(
                 flex: 1,
                 fit: FlexFit.tight,
@@ -132,10 +140,16 @@ class _LoginState extends ConsumerState<Login> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const AppLogo(imageString: AssetsConfig.logo, height: 60, width: 250),
+                        const AppLogo(
+                            imageString: AssetsConfig.logo,
+                            height: 60,
+                            width: 250),
                         Text(
                           'Sign In to the Admin Panel',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.blueGrey),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: Colors.blueGrey),
                         ),
                         const SizedBox(
                           height: 50,
@@ -156,7 +170,8 @@ class _LoginState extends ConsumerState<Login> {
                                 keyboardType: TextInputType.emailAddress,
                                 controller: emailCtlr,
                                 validator: (value) {
-                                  if (value!.isEmpty) return 'Email is required';
+                                  if (value!.isEmpty)
+                                    return 'Email is required';
                                   return null;
                                 },
                                 decoration: InputDecoration(
@@ -186,14 +201,20 @@ class _LoginState extends ConsumerState<Login> {
                                 controller: passwordCtrl,
                                 obscureText: _obsecureText,
                                 validator: (value) {
-                                  if (value!.isEmpty) return 'Password is required';
+                                  if (value!.isEmpty)
+                                    return 'Password is required';
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                     suffixIcon: Wrap(
                                       children: [
-                                        IconButton(onPressed: _onChangeVisiblity, icon: Icon(_lockIcon)),
-                                        IconButton(onPressed: () => passwordCtrl.clear(), icon: const Icon(Icons.clear)),
+                                        IconButton(
+                                            onPressed: _onChangeVisiblity,
+                                            icon: Icon(_lockIcon)),
+                                        IconButton(
+                                            onPressed: () =>
+                                                passwordCtrl.clear(),
+                                            icon: const Icon(Icons.clear)),
                                       ],
                                     ),
                                     hintText: 'Your Password',
@@ -215,21 +236,24 @@ class _LoginState extends ConsumerState<Login> {
                               elevation: 0,
                               child: Text(
                                 'Login',
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(color: Colors.white),
                               ),
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                  child: const Text('Test Demo Admin'),
-                                  onPressed: () => _handleDemoAdminLogin(),
-                                ),
-                              ],
-                            ),
+                            // const SizedBox(
+                            //   height: 20,
+                            // ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     TextButton(
+                            //       child: const Text('Test Demo Admin'),
+                            //       onPressed: () => _handleDemoAdminLogin(),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ],

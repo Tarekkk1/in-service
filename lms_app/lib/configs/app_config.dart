@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppConfig {
-
-  
   // App Name
   static const String appName = 'In Service';
 
@@ -10,7 +8,8 @@ class AppConfig {
   static const Color appThemeColor = Color(0xFF3F51B5);
 
   // Android Package Name
-  static const String androidPackageName = 'com.mrblab.prime_lms';
+  static const String androidPackageName =
+      'com.tarekzeyadproductions.in_service';
 
   // iOS App ID
   static const String iosAppID = '000000';

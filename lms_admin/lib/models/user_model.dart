@@ -43,12 +43,20 @@ class UserModel {
       name: d['name'],
       role: d['role'] ?? [],
       isDisbaled: d['disabled'] ?? false,
-      createdAt: d['created_at'] == null ? null : (d['created_at'] as Timestamp).toDate().toLocal(),
-      updatedAt: d['updated_at'] == null ? null : (d['updated_at'] as Timestamp).toDate().toLocal(),
-      authorInfo: d['author_info'] == null ? null : AuthorInfo.fromMap(d['author_info']),
+      createdAt: d['created_at'] == null
+          ? null
+          : (d['created_at'] as Timestamp).toDate().toLocal(),
+      updatedAt: d['updated_at'] == null
+          ? null
+          : (d['updated_at'] as Timestamp).toDate().toLocal(),
+      authorInfo: d['author_info'] == null
+          ? null
+          : AuthorInfo.fromMap(d['author_info']),
       enrolledCourses: d['enrolled'] ?? [],
       wishList: d['wishlist'] ?? [],
-      subscription: d['subscription'] == null ? null : Subscription.fromFirestore(d['subscription']),
+      subscription: d['subscription'] == null
+          ? null
+          : Subscription.fromFirestore(d['subscription']),
       completedLessons: d['completed_lessons'] ?? [],
       platform: d['platform'],
     );
