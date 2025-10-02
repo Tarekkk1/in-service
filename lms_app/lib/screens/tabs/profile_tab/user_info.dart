@@ -24,11 +24,17 @@ class UserInfo extends StatelessWidget with UserMixin {
     return Column(
       children: [
         ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          onTap: () => NextScreen.openBottomSheet(context, EditProfile(user: user), maxHeight: 0.80),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          onTap: () => NextScreen.openBottomSheet(
+              context, EditProfile(user: user),
+              maxHeight: 0.80),
           title: Text(
             user.name,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +42,8 @@ class UserInfo extends StatelessWidget with UserMixin {
               Text(user.email),
             ],
           ),
-          leading: UserAvatar(imageUrl: user.imageUrl, radius: 50, iconSize: 25),
+          leading:
+              UserAvatar(imageUrl: user.imageUrl, radius: 50, iconSize: 25),
           trailing: const Icon(
             FeatherIcons.edit3,
             size: 20,
@@ -46,10 +53,11 @@ class UserInfo extends StatelessWidget with UserMixin {
           builder: (context, ref, child) {
             final settings = ref.watch(appSettingsProvider);
             //if (IAPConfig.iAPEnabled && settings?.license == LicenseType.extended) {
-              return InkWell(
-                child: user.subscription == null ? _noSubscriptionContainer(context) : _subscriptionContainer(context),
-                onTap: () => NextScreen.openBottomSheet(context, const IAPScreen(), isDismissable: false),
-              );
+            return InkWell(
+              child: user.subscription == null
+                  ? _noSubscriptionContainer(context)
+                  : _subscriptionContainer(context),
+            );
             //} else {
             //  return const SizedBox.shrink();
             //}
@@ -68,10 +76,15 @@ class UserInfo extends StatelessWidget with UserMixin {
       ),
       child: ListTile(
           minVerticalPadding: 20,
-          leading: CircleAvatar(backgroundColor: Theme.of(context).primaryColor, child: Image.asset(premiumImage, height: 20, width: 20)),
+          leading: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Image.asset(premiumImage, height: 20, width: 20)),
           title: Text(
             user.subscription!.plan,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           subtitle: UserMixin.isExpired(user)
               ? const Text(
@@ -87,8 +100,12 @@ class UserInfo extends StatelessWidget with UserMixin {
                       children: [
                         const TextSpan(text: '('),
                         TextSpan(
-                          text: 'expire-in-days'.tr(args: [remainingDays(user).toString()]),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                          text: 'expire-in-days'
+                              .tr(args: [remainingDays(user).toString()]),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(color: Colors.red),
                         ),
                         const TextSpan(text: ')')
                       ]),
@@ -106,10 +123,13 @@ class UserInfo extends StatelessWidget with UserMixin {
       child: ListTile(
         trailing: const Icon(FeatherIcons.chevronRight),
         minVerticalPadding: 20,
-        leading: CircleAvatar(backgroundColor: Theme.of(context).primaryColor, child: Image.asset(premiumImage, height: 20, width: 20)),
+        leading: CircleAvatar(
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Image.asset(premiumImage, height: 20, width: 20)),
         title: Text(
           'subscribe-to-access-features',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18),
+          style:
+              Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18),
         ).tr(),
       ),
     );
