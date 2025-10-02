@@ -16,6 +16,7 @@ class UserModel {
   List? completedLessons;
   String? platform;
   List? reviews;
+  String? deviceId;
 
   UserModel({
     required this.id,
@@ -33,6 +34,7 @@ class UserModel {
     this.completedLessons,
     this.platform,
     this.reviews,
+    this.deviceId,
   });
 
   factory UserModel.fromFirebase(DocumentSnapshot snap) {
@@ -48,6 +50,7 @@ class UserModel {
       updatedAt: d['updated_at'] == null ? null : (d['updated_at'] as Timestamp).toDate(),
       authorInfo: d['author_info'] == null ? null : AuthorInfo.fromMap(d['author_info']),
       enrolledCourses: d['enrolled'] ?? [],
+      deviceId: d['device_id'],
       wishList: d['wishlist'] ?? [],
       subscription: d['subscription'] == null ? null : Subscription.fromFirestore(d['subscription']),
       completedLessons: d['completed_lessons'] ?? [],

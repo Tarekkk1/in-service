@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lms_app/services/device_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,32 +18,132 @@ class AuthService {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   Future<UserCredential?> loginWithEmailPassword(BuildContext context, String email, String password) async {
-    UserCredential? user;
     try {
-      user = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      // Get current device ID
+      final currentDeviceId = await DeviceService.getDeviceId();
+      
+      // Get user document from Firestore first to check device ID
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (userDoc.docs.isNotEmpty) {
+        final userData = userDoc.docs.first.data();
+        final storedDeviceId = userData['device_id'];
+
+        // If device ID exists and doesn't match
+        if (storedDeviceId != null && storedDeviceId != currentDeviceId) {
+          if (!context.mounted) return null;
+          openSnackbarFailure(context, 'This account can only be accessed from the original device');
+          return null;
+        }
+      }
+
+      // Proceed with login
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, 
+        password: password
+      );
+
+      // If this is first login (no device ID stored), save the current device ID
+      if (userDoc.docs.isEmpty || userDoc.docs.first.data()['device_id'] == null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .update({'device_id': currentDeviceId});
+      }
+
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       debugPrint('error: $e');
       if (!context.mounted) return null;
       openSnackbarFailure(context, e.message);
     }
-    return user;
+    return null;
   }
 
   Future<UserCredential?> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
     if (googleUser == null) return null;
+
+    // Check device ID
+    final currentDeviceId = await DeviceService.getDeviceId();
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: googleUser.email)
+        .get();
+
+    if (userDoc.docs.isNotEmpty) {
+      final userData = userDoc.docs.first.data();
+      final storedDeviceId = userData['device_id'];
+      
+      if (storedDeviceId != null && storedDeviceId != currentDeviceId) {
+        throw FirebaseAuthException(
+          code: 'wrong-device',
+          message: 'This account can only be accessed from the original device'
+        );
+      }
+    }
+
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    return await _firebaseAuth.signInWithCredential(credential);
+    
+    final userCredential = await _firebaseAuth.signInWithCredential(credential);
+    
+    // If first login, save device ID
+    if (userDoc.docs.isEmpty || userDoc.docs.first.data()['device_id'] == null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .update({'device_id': currentDeviceId});
+    }
+    
+    return userCredential;
   }
 
   Future<UserCredential?> signInWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
+    if (loginResult.status != LoginStatus.success) return null;
+
+    // Get Facebook user data to check email
+    final userData = await FacebookAuth.instance.getUserData();
+    final email = userData['email'];
+
+    // Check device ID
+    final currentDeviceId = await DeviceService.getDeviceId();
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+
+    if (userDoc.docs.isNotEmpty) {
+      final userData = userDoc.docs.first.data();
+      final storedDeviceId = userData['device_id'];
+      
+      if (storedDeviceId != null && storedDeviceId != currentDeviceId) {
+        throw FirebaseAuthException(
+          code: 'wrong-device',
+          message: 'This account can only be accessed from the original device'
+        );
+      }
+    }
+
     final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
-    return await _firebaseAuth.signInWithCredential(facebookAuthCredential);
+    final userCredential = await _firebaseAuth.signInWithCredential(facebookAuthCredential);
+    
+    // If first login, save device ID
+    if (userDoc.docs.isEmpty || userDoc.docs.first.data()['device_id'] == null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .update({'device_id': currentDeviceId});
+    }
+    
+    return userCredential;
   }
 
   String generateNonce([int length = 32]) {
