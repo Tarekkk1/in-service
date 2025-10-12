@@ -132,5 +132,9 @@
     "buy-app-subtitle": "Crea tu propia aplicación de LMS",
     "user-disable-title": "¡Acceso Denegado!",
     "user-disable-subtitle": "Por favor, contacta nuestro correo de soporte.",
-    "unmark-complete": "Desmarcar Completo"
+    "unmark-complete": "Desmarcar Completo",
+    "enrollment-required-title": "Inscripción Requerida",
+    "enrollment-required-subtitle": "Este curso premium requiere aprobación de inscripción. Por favor, contacta nuestro equipo de soporte al cliente para habilitar tu inscripción en este curso.",
+    "customer-support-info": "Nuestro equipo de soporte está listo para ayudarte con la inscripción del curso y opciones de pago.",
+    "contact-support": "Contactar Soporte"
 }

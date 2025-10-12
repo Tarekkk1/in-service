@@ -132,5 +132,9 @@
     "buy-app-subtitle": "قم ببناء تطبيق LMS الخاص بك",
     "user-disable-title": "الوصول مرفوض!",
     "user-disable-subtitle": "الرجاء الاتصال ببريد الدعم الخاص بنا.",
-    "unmark-complete": "إلغاء الاكتمال"
+    "unmark-complete": "إلغاء الاكتمال",
+    "enrollment-required-title": "التسجيل مطلوب",
+    "enrollment-required-subtitle": "هذه الدورة المميزة تتطلب موافقة على التسجيل. يرجى الاتصال بفريق دعم العملاء لتفعيل تسجيلك في هذه الدورة.",
+    "customer-support-info": "فريق الدعم لدينا مستعد لمساعدتك في تسجيل الدورة وخيارات الدفع.",
+    "contact-support": "اتصل بالدعم"
 }

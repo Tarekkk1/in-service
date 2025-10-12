@@ -132,5 +132,9 @@
     "buy-app-subtitle": "Build your own LMS app",
     "user-disable-title": "Access Denied!",
     "user-disable-subtitle": "Please contact our support email.",
-    "unmark-complete": "Unmark Complete"
+    "unmark-complete": "Unmark Complete",
+    "enrollment-required-title": "Enrollment Required",
+    "enrollment-required-subtitle": "This premium course requires enrollment approval. Please contact our customer support team to enable your enrollment in this course.",
+    "customer-support-info": "Our support team is ready to assist you with course enrollment and payment options.",
+    "contact-support": "Contact Support"
 }

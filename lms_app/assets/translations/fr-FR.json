@@ -132,5 +132,9 @@
     "buy-app-subtitle": "Créez votre propre application LMS",
     "user-disable-title": "Accès Refusé !",
     "user-disable-subtitle": "Veuillez contacter notre adresse e-mail d'assistance.",
-    "unmark-complete": "Décocher Complet"
+    "unmark-complete": "Décocher Complet",
+    "enrollment-required-title": "Inscription Requise",
+    "enrollment-required-subtitle": "Ce cours premium nécessite une approbation d'inscription. Veuillez contacter notre équipe de support client pour activer votre inscription à ce cours.",
+    "customer-support-info": "Notre équipe de support est prête à vous aider avec l'inscription aux cours et les options de paiement.",
+    "contact-support": "Contacter le Support"
 }

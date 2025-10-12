@@ -14,6 +14,7 @@ import 'package:lms_app/services/auth_service.dart';
 import 'package:lms_app/services/firebase_service.dart';
 import 'package:lms_app/utils/next_screen.dart';
 import 'package:lms_app/utils/snackbars.dart';
+import 'package:lms_app/utils/enrollment_dialog.dart';
 import '../providers/user_data_provider.dart';
 import '../iAP/iap_screen.dart';
 import 'package:lms_app/iAP/iap_config.dart';
@@ -75,24 +76,13 @@ mixin UserMixin {
           await _comfirmEnrollment(context, user, course, ref);
         }
       } else {
-        //  Premium Course
-        //if (user.subscription != null && !isExpired(user)) {
-          if (hasEnrolled(user, course)) {
-            NextScreen.popup(context, CurriculamScreen(course: course));
-          } else {
-            //await _comfirmEnrollment(context, user, course, ref);
-          }
-        //} else {
-          // Checking license before opening iAP
-        //  final settings = ref.read(appSettingsProvider);
-         // if (IAPConfig.iAPEnabled && settings?.license == LicenseType.extended) {
-         //  NextScreen.openBottomSheet(context, const IAPScreen(), isDismissable: false);
-         // } else {
-         //   openSnackbarFailure(context, 'Extended license required!');
-         // }
-        // NextScreen.openBottomSheet(context, const IAPScreen(), isDismissable: false);
-
-        //}
+        // Premium Course
+        if (hasEnrolled(user, course)) {
+          NextScreen.popup(context, CurriculamScreen(course: course));
+        } else {
+          // Show enrollment dialog for non-enrolled users on paid courses
+          await openEnrollmentDialog(context, ref);
+        }
       }
     } else {
       NextScreen.openBottomSheet(context, const LoginScreen(popUpScreen: true));
