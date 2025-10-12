@@ -16,11 +16,19 @@ Future<void> openEnrollmentDialog(BuildContext context, WidgetRef ref) {
     titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
       fontWeight: FontWeight.bold,
       color: Theme.of(context).primaryColor,
+    ) ?? TextStyle(
+      fontWeight: FontWeight.bold,
+      color: Theme.of(context).primaryColor,
+      fontSize: 24,
     ),
     msgAlign: TextAlign.center,
     msgStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
       color: Theme.of(context).textTheme.bodyMedium?.color,
       height: 1.5,
+    ) ?? TextStyle(
+      color: Theme.of(context).textTheme.bodyMedium?.color,
+      height: 1.5,
+      fontSize: 16,
     ),
     barrierDismissible: true,
     color: Theme.of(context).scaffoldBackgroundColor,
@@ -89,7 +97,7 @@ Future<void> openEnrollmentDialog(BuildContext context, WidgetRef ref) {
         color: Colors.grey,
         textStyle: TextStyle(
           fontWeight: FontWeight.w600,
-          color: Theme.of(context).textTheme.bodyMedium?.color,
+          color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black87,
         ),
       ),
       IconsOutlineButton(
