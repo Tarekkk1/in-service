@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lms_admin/components/user_info.dart';
 import 'package:lms_admin/components/custom_buttons.dart';
 import 'package:lms_admin/components/dialogs.dart';
+import 'package:lms_admin/components/course_assignment_dialog.dart';
+import 'package:lms_admin/forms/student_form.dart';
 import 'package:lms_admin/mixins/user_mixin.dart';
 import 'package:lms_admin/mixins/users_mixin.dart';
 import 'package:lms_admin/services/firebase_service.dart';
@@ -171,9 +173,24 @@ class UsersDataSource extends DataTableSource with UsersMixins, UserMixin {
     );
   }
 
+  void _handleEditStudent(UserModel user) {
+    CustomDialogs.openResponsiveDialog(
+      context,
+      widget: StudentForm(student: user),
+    );
+  }
+
+  void _handleCourseAssignment(UserModel user) {
+    CustomDialogs.openResponsiveDialog(
+      context,
+      widget: CourseAssignmentDialog(student: user),
+    );
+  }
+
   PopupMenuButton _menuButton(UserModel user) {
     final bool isAuthor = user.role!.contains('author') ? true : false;
     final bool isAdmin = user.role!.contains('admin') ? true : false;
+    final bool isStudent = user.role!.contains('student') ? true : false;
 
     return PopupMenuButton(
       child: const CircleAvatar(
@@ -184,7 +201,7 @@ class UsersDataSource extends DataTableSource with UsersMixins, UserMixin {
         ),
       ),
       itemBuilder: (context) {
-        return [
+        List<PopupMenuEntry> items = [
           PopupMenuItem(child: const Text('Copy User Id'), onTap: () => _onCopyUserId(user.id)),
           PopupMenuItem(
             enabled: !isAdmin,
@@ -197,6 +214,23 @@ class UsersDataSource extends DataTableSource with UsersMixins, UserMixin {
             onTap: () => _handleAuthorAccess(user, isAuthor),
           ),
         ];
+
+        // Add student-specific menu items
+        if (isStudent && !isAdmin) {
+          items.addAll([
+            const PopupMenuDivider(),
+            PopupMenuItem(
+              child: const Text('Edit Student'),
+              onTap: () => _handleEditStudent(user),
+            ),
+            PopupMenuItem(
+              child: const Text('Manage Courses'),
+              onTap: () => _handleCourseAssignment(user),
+            ),
+          ]);
+        }
+
+        return items;
       },
     );
   }

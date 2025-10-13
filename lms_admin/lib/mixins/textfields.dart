@@ -159,4 +159,32 @@ mixin TextFields {
       ],
     );
   }
+
+  // Helper method for creating consistent input decorations
+  InputDecoration inputDecoration(String hint, TextEditingController controller, VoidCallback onClear) {
+    return InputDecoration(
+      hintText: hint,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.blue, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      suffixIcon: IconButton(
+        onPressed: onClear,
+        icon: const Icon(Icons.clear, color: Colors.grey),
+      ),
+    );
+  }
 }

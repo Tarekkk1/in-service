@@ -6,22 +6,23 @@ import '../../../components/dialogs.dart';
 import '../../../configs/constants.dart';
 import '../../../forms/student_form.dart';
 import '../../../mixins/appbar_mixin.dart';
+import '../../../mixins/students_mixin.dart';
 import '../../../utils/reponsive.dart';
-import 'sort_users_button.dart';
+import '../users/sort_users_button.dart';
 import '../../../mixins/textfields.dart';
-import '../../../mixins/users_mixin.dart';
-import 'search_users_textfield.dart';
+import '../users/search_users_textfield.dart';
 
-final usersQueryProvider = StateProvider<Query>((ref) {
-  final query = FirebaseFirestore.instance.collection('users').orderBy('created_at');
+// Provider for students-only query
+final studentsQueryProvider = StateProvider<Query>((ref) {
+  final query = FirebaseFirestore.instance
+      .collection('users')
+      .where('role', arrayContains: 'student')
+      .orderBy('created_at', descending: true);
   return query;
 });
 
-final sortByUsersTextProvider = StateProvider<String>((ref) => sortByUsers.entries.first.value);
-final searchUsersFieldProvider = Provider<TextEditingController>((ref) => TextEditingController());
-
-class Users extends ConsumerWidget with UsersMixins, TextFields {
-  const Users({Key? key}) : super(key: key);
+class Students extends ConsumerWidget with StudentsMixins, TextFields {
+  const Students({Key? key}) : super(key: key);
 
   void _handleCreateStudent(BuildContext context) {
     CustomDialogs.openResponsiveDialog(
@@ -36,11 +37,11 @@ class Users extends ConsumerWidget with UsersMixins, TextFields {
       color: Colors.white,
       child: Column(
         children: [
-          AppBarMixin.buildTitleBar(context, title: 'Users', buttons: [
+          AppBarMixin.buildTitleBar(context, title: 'Students', buttons: [
             CustomButtons.customOutlineButton(
               context,
               icon: Icons.person_add,
-              text: 'Create Student',
+              text: 'Add Student',
               onPressed: () => _handleCreateStudent(context),
             ),
             const SizedBox(width: 10),
@@ -51,7 +52,7 @@ class Users extends ConsumerWidget with UsersMixins, TextFields {
             const SizedBox(width: 10),
             SortUsersButton(ref: ref),
           ]),
-          buildUsers(context, ref: ref, isMobile: Responsive.isMobile(context))
+          buildStudents(context, ref: ref, isMobile: Responsive.isMobile(context))
         ],
       ),
     );

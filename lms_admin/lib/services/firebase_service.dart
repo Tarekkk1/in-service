@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,7 @@ import '../models/user_model.dart';
 
 class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   static String getUID(String collectionName) => FirebaseFirestore.instance.collection(collectionName).doc().id;
 
@@ -403,5 +405,230 @@ class FirebaseService {
     final Course course = Course.fromFirestore(snapshot);
     final int count = course.lessonsCount;
     return count;
+  }
+
+  // Student Management Methods
+
+  /// Create a new student user with Firebase Authentication
+  Future<String> createStudent({
+    required String name,
+    required String email,
+    required String platform,
+    bool isDisabled = false,
+  }) async {
+    // Check if admin is authenticated
+    if (auth.currentUser == null) {
+      throw Exception('Admin must be authenticated to create students');
+    }
+
+    try {
+      // For web admin, we'll create the user document directly
+      // The student will need to register themselves with Firebase Auth later
+      final String userId = getUID('users');
+      
+      // Create user document in Firestore
+      final Map<String, dynamic> data = {
+        'id': userId,
+        'name': name,
+        'email': email,
+        'platform': platform,
+        'disabled': isDisabled,
+        'role': ['student'],
+        'enrolled': [],
+        'wishlist': [],
+        'completed_lessons': [],
+        'auth_created': false, // Student needs to complete registration
+        'created_at': FieldValue.serverTimestamp(),
+        'updated_at': FieldValue.serverTimestamp(),
+      };
+      
+      await firestore.collection('users').doc(userId).set(data);
+      
+      // Create invitation for student registration
+      await firestore.collection('student_invitations').doc(userId).set({
+        'email': email,
+        'name': name,
+        'user_id': userId,
+        'created_at': FieldValue.serverTimestamp(),
+        'status': 'pending',
+        'platform': platform,
+      });
+      
+      return userId;
+    } on FirebaseException catch (e) {
+      switch (e.code) {
+        case 'permission-denied':
+          throw Exception('Permission denied. Please check your admin rights.');
+        case 'network-request-failed':
+          throw Exception('Network error. Please check your connection.');
+        default:
+          throw Exception('Firebase error: ${e.message}');
+      }
+    } catch (e) {
+      print('Error creating student: $e');
+      rethrow;
+    }
+  }
+
+  /// Update existing student information
+  Future<void> updateStudent({
+    required String userId,
+    required String name,
+    required String email,
+    required String platform,
+    bool isDisabled = false,
+  }) async {
+    final Map<String, dynamic> data = {
+      'name': name,
+      'email': email,
+      'platform': platform,
+      'disabled': isDisabled,
+      'updated_at': FieldValue.serverTimestamp(),
+    };
+    
+    await firestore.collection('users').doc(userId).update(data);
+  }
+
+  /// Get published courses for course assignment (without composite index requirement)
+  Future<List<Course>> getPublishedCourses() async {
+    try {
+      // First try the optimized query
+      final QuerySnapshot snapshot = await firestore
+          .collection('courses')
+          .where('status', isEqualTo: 'published')
+          .get();
+      
+      final List<Course> courses = snapshot.docs.map((doc) => Course.fromFirestore(doc)).toList();
+      courses.sort((a, b) => a.name.compareTo(b.name));
+      return courses;
+    } catch (e) {
+      print('Error with filtered query, falling back to get all courses: $e');
+      // Fallback: get all courses and filter locally
+      return await getCoursesForAssignment();
+    }
+  }
+
+  /// Alternative method: Get all courses and filter locally  
+  Future<List<Course>> getCoursesForAssignment() async {
+    try {
+      final QuerySnapshot snapshot = await firestore.collection('courses').get();
+      final List<Course> allCourses = snapshot.docs.map((doc) => Course.fromFirestore(doc)).toList();
+      
+      // Filter published courses locally
+      final List<Course> publishedCourses = allCourses.where((course) => 
+        course.status == 'published'
+      ).toList();
+      
+      // Sort by name
+      publishedCourses.sort((a, b) => a.name.compareTo(b.name));
+      
+      return publishedCourses;
+    } catch (e) {
+      print('Error getting courses for assignment: $e');
+      throw Exception('Failed to load courses. Please check your connection and try again.');
+    }
+  }
+
+  /// Update student's course assignments
+  Future<void> updateStudentCourses({
+    required String userId,
+    required List<String> coursesToAdd,
+    required List<String> coursesToRemove,
+  }) async {
+    final WriteBatch batch = firestore.batch();
+    final DocumentReference userRef = firestore.collection('users').doc(userId);
+
+    // Get current enrolled courses
+    final DocumentSnapshot userSnapshot = await userRef.get();
+    final UserModel student = UserModel.fromFirebase(userSnapshot);
+    final List<String> currentEnrolled = List<String>.from(student.enrolledCourses ?? []);
+
+    // Update enrolled courses list
+    final Set<String> updatedEnrolled = Set<String>.from(currentEnrolled);
+    updatedEnrolled.addAll(coursesToAdd);
+    updatedEnrolled.removeAll(coursesToRemove);
+
+    // Update user document
+    batch.update(userRef, {
+      'enrolled': updatedEnrolled.toList(),
+      'updated_at': FieldValue.serverTimestamp(),
+    });
+
+    // Update student count for courses being added
+    for (String courseId in coursesToAdd) {
+      final DocumentReference courseRef = firestore.collection('courses').doc(courseId);
+      batch.update(courseRef, {
+        'students': FieldValue.increment(1),
+      });
+    }
+
+    // Update student count for courses being removed
+    for (String courseId in coursesToRemove) {
+      final DocumentReference courseRef = firestore.collection('courses').doc(courseId);
+      batch.update(courseRef, {
+        'students': FieldValue.increment(-1),
+      });
+    }
+
+    await batch.commit();
+  }
+
+  /// Get students with specific filters
+  Future<List<UserModel>> getStudents({
+    String? searchQuery,
+    bool? isDisabled,
+    int? limit,
+  }) async {
+    Query query = firestore.collection('users').where('role', arrayContains: 'student');
+
+    if (isDisabled != null) {
+      query = query.where('disabled', isEqualTo: isDisabled);
+    }
+
+    query = query.orderBy('created_at', descending: true);
+
+    if (limit != null) {
+      query = query.limit(limit);
+    }
+
+    final QuerySnapshot snapshot = await query.get();
+    List<UserModel> students = snapshot.docs.map((doc) => UserModel.fromFirebase(doc)).toList();
+
+    // Apply search filter locally since Firestore doesn't support text search
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      students = students.where((student) {
+        return student.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
+               student.email.toLowerCase().contains(searchQuery.toLowerCase());
+      }).toList();
+    }
+
+    return students;
+  }
+
+  /// Get student count by status
+  Future<Map<String, int>> getStudentStats() async {
+    final Map<String, int> stats = {
+      'total': 0,
+      'active': 0,
+      'disabled': 0,
+    };
+
+    // Get total students
+    final QuerySnapshot totalSnapshot = await firestore
+        .collection('users')
+        .where('role', arrayContains: 'student')
+        .get();
+    stats['total'] = totalSnapshot.docs.length;
+
+    // Get disabled students
+    final QuerySnapshot disabledSnapshot = await firestore
+        .collection('users')
+        .where('role', arrayContains: 'student')
+        .where('disabled', isEqualTo: true)
+        .get();
+    stats['disabled'] = disabledSnapshot.docs.length;
+    stats['active'] = (stats['total'] ?? 0) - (stats['disabled'] ?? 0);
+
+    return stats;
   }
 }

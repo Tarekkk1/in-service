@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lms_admin/components/app_logo.dart';
 import 'package:lms_admin/configs/assets_config.dart';
 import 'package:lms_admin/models/app_settings_model.dart';
-import 'package:lms_admin/pages/verify.dart';
 import 'package:lms_admin/providers/auth_state_provider.dart';
 import 'package:lms_admin/providers/user_data_provider.dart';
 import 'package:lms_admin/utils/reponsive.dart';
@@ -75,14 +74,14 @@ class _LoginState extends ConsumerState<Login> {
       final LicenseType license = settings?.license ?? LicenseType.none;
       final bool isVerified = license != LicenseType.none;
 
-      if (isVerified) {
+      // if (isVerified) {
         await ref.read(userDataProvider.notifier).getData();
         if (!mounted) return;
         NextScreen.replaceAnimation(context, const Home());
-      } else {
-        if (!mounted) return;
-        NextScreen.replaceAnimation(context, const VerifyInfo());
-      }
+      // } else {
+      //   if (!mounted) return;
+      //   NextScreen.replaceAnimation(context, const VerifyInfo());
+      // }
     } else {
       await AuthService()
           .adminLogout()
