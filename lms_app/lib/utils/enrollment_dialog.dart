@@ -71,7 +71,7 @@ Future<void> openEnrollmentDialog(BuildContext context, WidgetRef ref) {
             child: Column(
               children: [
                 Icon(
-                  Icons.support_agent_rounded,
+                  Icons.chat,
                   size: 32,
                   color: Theme.of(context).primaryColor,
                 ),
@@ -103,10 +103,9 @@ Future<void> openEnrollmentDialog(BuildContext context, WidgetRef ref) {
       IconsOutlineButton(
         onPressed: () {
           Navigator.pop(context);
-          final settings = ref.read(appSettingsProvider);
-          if (settings?.supportEmail != null && settings!.supportEmail!.isNotEmpty) {
-            AppService().openEmailSupport(settings.supportEmail!);
-          }
+          // Open WhatsApp with pre-filled message
+          final message = 'whatsapp-enrollment-message'.tr();
+          AppService().openWhatsAppSupport('+201147157411', message);
         },
         text: 'contact-support'.tr(),
         color: Theme.of(context).primaryColor,

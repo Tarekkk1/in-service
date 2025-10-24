@@ -1,14 +1,15 @@
 # Enrollment Dialog Feature
 
 ## Overview
-This feature implements a premium course enrollment dialog that appears when users try to access paid courses they are not enrolled in. The dialog encourages users to contact customer support for enrollment assistance.
+This feature implements a premium course enrollment dialog that appears when users try to access paid courses they are not enrolled in. The dialog encourages users to contact customer support via WhatsApp for enrollment assistance.
 
 ## Implementation Details
 
 ### Files Modified/Created:
 1. **`lib/utils/enrollment_dialog.dart`** - New dialog component
 2. **`lib/mixins/user_mixin.dart`** - Updated to use enrollment dialog
-3. **Translation files** - Added new translation keys
+3. **`lib/services/app_service.dart`** - Added WhatsApp support functionality
+4. **Translation files** - Added new translation keys
 
 ### How It Works:
 1. When a user clicks on a paid course they're not enrolled in, the `handleEnrollment` method in `UserMixin` is called
@@ -16,23 +17,25 @@ This feature implements a premium course enrollment dialog that appears when use
 3. The dialog shows:
    - Premium course icon
    - Clear message about enrollment requirement
-   - Contact support information
-   - Action buttons (Close/Contact Support)
+   - WhatsApp contact support information
+   - Action buttons (Close/Contact Support via WhatsApp)
 
 ### Translation Keys Added:
 - `enrollment-required-title`: "Enrollment Required"
 - `enrollment-required-subtitle`: "This premium course requires enrollment approval..."
-- `customer-support-info`: "Our support team is ready to assist you..."
+- `customer-support-info`: "Contact us via WhatsApp for quick assistance..."
 - `contact-support`: "Contact Support"
+- `whatsapp-enrollment-message`: Pre-filled WhatsApp message for support
 
 ### Languages Supported:
 - English (en-US)
 - Arabic (ar-SA)
-- French (fr-FR)
-- Spanish (es-ES)
 
-### Contact Support Integration:
-The dialog integrates with the existing `AppService().openEmailSupport()` method to open the default email client with a pre-filled support email when users click "Contact Support".
+### WhatsApp Integration:
+The dialog integrates with WhatsApp via `AppService().openWhatsAppSupport()` method:
+- **Phone Number**: +201147157411
+- **Pre-filled Message**: Localized message asking for enrollment assistance
+- **Cross-platform**: Works on web, iOS, and Android
 
 ## Usage:
 The feature automatically activates when:
@@ -43,8 +46,15 @@ The feature automatically activates when:
 
 ## Design Features:
 - Premium icon with themed styling
+- Chat icon to indicate WhatsApp communication
 - Responsive layout with Material Design principles
 - Proper spacing and visual hierarchy
 - Theme-aware colors and styling
 - Dismissible dialog (can be closed by tapping outside or back button)
 - Accessible button styling with proper contrast
+
+## WhatsApp Features:
+- Automatically opens WhatsApp when "Contact Support" is pressed
+- Pre-fills message in user's language
+- Uses international phone number format
+- Fallback error handling if WhatsApp can't be opened

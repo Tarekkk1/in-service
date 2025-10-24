@@ -128,6 +128,24 @@ class AppService {
     return DateTime.now().toUtc().toString().split(' ')[0].replaceAll('-', '');
   }
 
+  Future openWhatsAppSupport(String phoneNumber, String message) async {
+    // Remove any non-digit characters from phone number
+    final cleanNumber = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
+    
+    // URL encode the message
+    final encodedMessage = Uri.encodeComponent(message);
+    
+    // Create WhatsApp URL
+    final whatsappUrl = 'https://wa.me/$cleanNumber?text=$encodedMessage';
+    final Uri uri = Uri.parse(whatsappUrl);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      openToast1("Can't open WhatsApp");
+    }
+  }
+
   static void svgPrecacheImage() {
     
     // SVG Images

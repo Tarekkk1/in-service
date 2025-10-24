@@ -49,20 +49,20 @@ class UserInfo extends StatelessWidget with UserMixin {
             size: 20,
           ),
         ),
-        Consumer(
-          builder: (context, ref, child) {
-            final settings = ref.watch(appSettingsProvider);
+        // Consumer(
+          // builder: (context, ref, child) {
+            // final settings = ref.watch(appSettingsProvider);
             //if (IAPConfig.iAPEnabled && settings?.license == LicenseType.extended) {
-            return InkWell(
-              child: user.subscription == null
-                  ? _noSubscriptionContainer(context)
-                  : _subscriptionContainer(context),
-            );
+            // return InkWell(
+              // child: user.subscription == null
+                  // ? _noSubscriptionContainer(context)
+                  // : _subscriptionContainer(context),
+            // );
             //} else {
             //  return const SizedBox.shrink();
             //}
-          },
-        )
+          // },
+        // )
       ],
     );
   }
