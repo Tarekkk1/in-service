@@ -1,15 +1,16 @@
 # Enrollment Dialog Feature
 
 ## Overview
-This feature implements a premium course enrollment dialog that appears when users try to access paid courses they are not enrolled in. The dialog encourages users to contact customer support via WhatsApp for enrollment assistance.
+This feature implements a premium course enrollment dialog that appears when users try to access paid courses they are not enrolled in. The dialog encourages users to contact customer support via WhatsApp for enrollment assistance. **Note: All in-app purchase functionality has been removed - course enrollment is handled through the admin dashboard.**
 
 ## Implementation Details
 
 ### Files Modified/Created:
 1. **`lib/utils/enrollment_dialog.dart`** - New dialog component
-2. **`lib/mixins/user_mixin.dart`** - Updated to use enrollment dialog
+2. **`lib/mixins/user_mixin.dart`** - Updated to use enrollment dialog, removed IAP imports
 3. **`lib/services/app_service.dart`** - Added WhatsApp support functionality
-4. **Translation files** - Added new translation keys
+4. **Translation files** - Added new translation keys, removed IAP translations
+5. **Removed entire `lib/iAP/` directory** - All in-app purchase code removed
 
 ### How It Works:
 1. When a user clicks on a paid course they're not enrolled in, the `handleEnrollment` method in `UserMixin` is called
@@ -19,6 +20,7 @@ This feature implements a premium course enrollment dialog that appears when use
    - Clear message about enrollment requirement
    - WhatsApp contact support information
    - Action buttons (Close/Contact Support via WhatsApp)
+4. **Course enrollment is managed through the admin dashboard, not through in-app purchases**
 
 ### Translation Keys Added:
 - `enrollment-required-title`: "Enrollment Required"

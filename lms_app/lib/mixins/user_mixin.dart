@@ -16,8 +16,6 @@ import 'package:lms_app/utils/next_screen.dart';
 import 'package:lms_app/utils/snackbars.dart';
 import 'package:lms_app/utils/enrollment_dialog.dart';
 import '../providers/user_data_provider.dart';
-import '../iAP/iap_screen.dart';
-import 'package:lms_app/iAP/iap_config.dart';
 
 mixin UserMixin {
   void handleLogout(context, {required WidgetRef ref}) async {
@@ -104,14 +102,6 @@ mixin UserMixin {
     required Course course,
   }) async {
     NextScreen.popup(context, CurriculamScreen(course: course));
-    //if (course.priceStatus == 'free') {
-    //  NextScreen.popup(context, CurriculamScreen(course: course));
-    //} else {
-    //  if (!isExpired(user)) {
-    //    NextScreen.popup(context, CurriculamScreen(course: course));
-    //  } else {
-    //    NextScreen.openBottomSheet(context, const IAPScreen());
-    //  }
-    //}
+    NextScreen.popup(context, CurriculamScreen(course: course));
   }
 }

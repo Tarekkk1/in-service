@@ -9,7 +9,6 @@ import 'package:lms_app/models/category.dart';
 import 'package:lms_app/models/chart_model.dart';
 import 'package:lms_app/models/course.dart';
 import 'package:lms_app/models/lesson.dart';
-import 'package:lms_app/models/purchase_history.dart';
 import 'package:lms_app/models/review.dart';
 import 'package:lms_app/models/section.dart';
 import 'package:lms_app/models/subscription.dart';
@@ -321,12 +320,6 @@ class FirebaseService {
     await ref.update({'subscription': data});
   }
 
-  Future savePurchaseHistory(UserModel user, PurchaseHistory history) async {
-    final Map<String, dynamic> data = PurchaseHistory.getMap(history);
-    final DocumentReference ref = firestore.collection('purchases').doc();
-    await ref.set(data);
-  }
-
   Future<List<UserModel>> getTopAuthors({int limit = 5}) async {
     List<UserModel> data = [];
     await firestore.collection('users').where('role', arrayContainsAny: ['author', 'admin']).limit(limit).get().then((QuerySnapshot? snapshot) {
@@ -550,25 +543,6 @@ class FirebaseService {
   Future updateUserStats() async {
     final String id = AppService.getTodaysID();
     final DocumentReference docRef = firestore.collection('user_stats').doc(id);
-    await firestore.runTransaction((transaction) {
-      return transaction.get(docRef).then((DocumentSnapshot snapshot) {
-        if (snapshot.exists) {
-          final ChartModel chartModel = ChartModel.fromFirestore(snapshot);
-          final newChartModel = ChartModel(id: chartModel.id, count: chartModel.count + 1, timestamp: chartModel.timestamp);
-          final Map<String, dynamic> data = ChartModel.getMap(newChartModel);
-          transaction.set(docRef, data, SetOptions(merge: true));
-        } else {
-          final newChartModel = ChartModel(id: id, count: 1, timestamp: DateTime.now().toUtc());
-          final Map<String, dynamic> data = ChartModel.getMap(newChartModel);
-          transaction.set(docRef, data, SetOptions(merge: true));
-        }
-      });
-    });
-  }
-
-  Future updatePurchaseStats() async {
-    final String id = AppService.getTodaysID();
-    final DocumentReference docRef = firestore.collection('purchase_stats').doc(id);
     await firestore.runTransaction((transaction) {
       return transaction.get(docRef).then((DocumentSnapshot snapshot) {
         if (snapshot.exists) {
