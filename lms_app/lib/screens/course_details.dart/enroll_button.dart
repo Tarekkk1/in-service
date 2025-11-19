@@ -23,7 +23,7 @@ class EnrollButton extends ConsumerWidget with UserMixin {
     final String text = CourseMixin.enrollButtonText(course, user);
     final bool isPremium = course.priceStatus != 'free';
     final bool isEnrolled = hasEnrolled(user, course);
-    final bool hasSubscription = isUserPremium(user);
+    final bool hasSubscription = UserMixin.isUserPremium(user);
     
     // Show access denied bar for premium courses when not enrolled and no subscription
     final bool showAccessDeniedBar = isPremium && !isEnrolled && !hasSubscription;
