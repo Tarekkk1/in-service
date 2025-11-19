@@ -14,7 +14,8 @@ mixin CourseMixin {
 
   static String enrollButtonText(Course course, UserModel? user) {
     if (user == null || !user.enrolledCourses!.contains(course.id)) {
-      return 'enroll-now';
+      // Return 'enroll-for-free' for free courses, 'enroll-now' for premium (though it won't be shown)
+      return course.priceStatus == 'free' ? 'enroll-for-free' : 'enroll-now';
     } else {
       List validIds = user.completedLessons!.where((element) => element.toString().contains(course.id)).toList();
       final double courseProgess = validIds.isEmpty ? 0 : (validIds.length / course.lessonsCount);

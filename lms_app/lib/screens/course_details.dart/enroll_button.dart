@@ -21,56 +21,62 @@ class EnrollButton extends ConsumerWidget with UserMixin {
     final user = ref.watch(userDataProvider);
     final bool isLoading = ref.watch(_isLoadingEnrollmentProvider);
     final String text = CourseMixin.enrollButtonText(course, user);
-    //final bool isPremium = course.priceStatus == priceStatus.keys.first ? false : true;
-    final bool isPremium = true;
+    final bool isPremium = course.priceStatus != 'free';
+    final bool isEnrolled = hasEnrolled(user, course);
+    final bool hasSubscription = isUserPremium(user);
+    
+    // Show access denied bar for premium courses when not enrolled and no subscription
+    final bool showAccessDeniedBar = isPremium && !isEnrolled && !hasSubscription;
 
     return BottomAppBar(
       padding: const EdgeInsets.all(0),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         width: MediaQuery.of(context).size.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Visibility(
-              visible: !hasEnrolled(user, course),
-              child: Flexible(
-                fit: FlexFit.loose,
-                flex: isPremium ? 1 : 2,
-                child: isPremium ? _PremiumTag() : _FreeTag(),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.tight,
-              flex: 5,
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    elevation: 0,
+        child: showAccessDeniedBar
+            ? _AccessDeniedBar()
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Visibility(
+                    visible: !isEnrolled,
+                    child: Flexible(
+                      fit: FlexFit.loose,
+                      flex: isPremium ? 1 : 2,
+                      child: isPremium ? _PremiumTag() : _FreeTag(),
+                    ),
                   ),
-                  child: isLoading
-                      ? const LoadingIndicatorWidget(color: Colors.white)
-                      : Text(
-                          text,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ).tr(),
-                  onPressed: () async {
-                    ref.read(_isLoadingEnrollmentProvider.notifier).state = true;
-                    await handleEnrollment(context, user: user, course: course, ref: ref);
-                    ref.read(_isLoadingEnrollmentProvider.notifier).state = false;
-                  },
-                ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    flex: 5,
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          elevation: 0,
+                        ),
+                        child: isLoading
+                            ? const LoadingIndicatorWidget(color: Colors.white)
+                            : Text(
+                                text,
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ).tr(),
+                        onPressed: () async {
+                          ref.read(_isLoadingEnrollmentProvider.notifier).state = true;
+                          await handleEnrollment(context, user: user, course: course, ref: ref);
+                          ref.read(_isLoadingEnrollmentProvider.notifier).state = false;
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -107,6 +113,41 @@ class _PremiumTag extends StatelessWidget {
         color: Theme.of(context).primaryColor,
       ),
       child: Image.asset(premiumImage, fit: BoxFit.contain),
+    );
+  }
+}
+
+class _AccessDeniedBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.grey.shade400),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.lock_outline,
+            color: Colors.grey.shade600,
+            size: 20,
+          ),
+          const SizedBox(width: 10),
+          Text(
+            'no-access-message',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.grey.shade700,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+          ).tr(),
+        ],
+      ),
     );
   }
 }

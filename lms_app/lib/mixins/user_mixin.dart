@@ -14,7 +14,6 @@ import 'package:lms_app/services/auth_service.dart';
 import 'package:lms_app/services/firebase_service.dart';
 import 'package:lms_app/utils/next_screen.dart';
 import 'package:lms_app/utils/snackbars.dart';
-import 'package:lms_app/utils/enrollment_dialog.dart';
 import '../providers/user_data_provider.dart';
 
 mixin UserMixin {
@@ -78,8 +77,16 @@ mixin UserMixin {
         if (hasEnrolled(user, course)) {
           NextScreen.popup(context, CurriculamScreen(course: course));
         } else {
-          // Show enrollment dialog for non-enrolled users on paid courses
-          await openEnrollmentDialog(context, ref);
+          // Check if user has active subscription
+          if (isUserPremium(user)) {
+            // Auto-enroll and open curriculum for premium users
+            AdManager.initInterstitailAds(ref);
+            await _comfirmEnrollment(context, user, course, ref);
+            if (context.mounted) {
+              NextScreen.popup(context, CurriculamScreen(course: course));
+            }
+          }
+          // If no subscription, do nothing - access denied bar will be shown
         }
       }
     } else {
